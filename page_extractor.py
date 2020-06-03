@@ -114,8 +114,19 @@ class PageExtractor:
 
 
 if __name__ == "__main__":
-    from hough_line_corner_detector import HoughLineCornerDetector, HoughLineParams
+    import argparse
+    from hough_line_corner_detector import HoughLineCornerDetector
     from processors import Resizer, OtsuThresholder, FastDenoiser
+
+    parser = argparse.ArgumentParser(description="Python script to detect and extract documents.")
+
+    parser.add_argument(
+        '-i',
+        '--input-image',
+        help = "Image containing the document",
+        required = True,
+        dest = 'input_image'
+    )
 
     page_extractor = PageExtractor(
         preprocessors = [
@@ -124,15 +135,13 @@ if __name__ == "__main__":
             OtsuThresholder(output_process = True)
         ],
         corner_detector = HoughLineCornerDetector(
-            hough_line_params = HoughLineParams(
-                rho_acc = 1,
-                theta_acc = 180,
-                thresh = 100
-            ),
+            rho_acc = 1,
+            theta_acc = 180,
+            thresh = 100,
             output_process = True
         )
     )
-    extracted = page_extractor('input/receipt.jpg')
-    cv2.imwrite("output/output.jpg", extracted)
+    args = parser.parse_args()
+    extracted = page_extractor(args.input_image)
     cv2.imshow("Extracted page", extracted)
     cv2.waitKey(0)

@@ -1,1 +1,5 @@
 *doc_scanner
+*__pycache__
+test.ipynb
+hough_line_corner_detector_2.py
+.vscode
